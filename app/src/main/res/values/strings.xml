@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RollerRocket</string>
+    <string name="title_section1">Inbox</string>
+    <string name="title_section2">Friends</string>
+    <string name="title_section3">Section 3</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="hintUserName">Username</string>
+    <string name="hintPassword">Password</string>
+    <string name="stringLogin">Login</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="emailHint">Email</string>
+    <string name="signUpButtonLabel">Sign Up</string>
+    <string name="signup_error_message">Please you fill in all fields.</string>
+    <string name="signup_error_title">Problem</string>
+    <string name="login_error_message">Please enter both a username and password.</string>
+    <string name="login_error_title">Muppet</string>
+    <string name="logout">Log Out</string>
+    <string name="textView_empty_inbox">No new messages</string>
+    <string name="textView_empty_friends">Add friends to begin!</string>
+
+</resources>
