@@ -18,8 +18,19 @@
     <string name="signup_error_title">Problem</string>
     <string name="login_error_message">Please enter both a username and password.</string>
     <string name="login_error_title">Muppet</string>
-    <string name="logout">Log Out</string>
+    <string name="menu_logout_label">Log Out</string>
     <string name="textView_empty_inbox">No new messages</string>
     <string name="textView_empty_friends">Add friends to begin!</string>
-
+    <string name="menu_edit_friends_label">Edit Friends</string>
+    <string name="title_activity_edit_friends">Edit Friends</string>
+    <string name="textView_editfriends_empty">You have no friends! hahaahaahaha.</string>
+    <string name="generic_error_title">Error</string>
+    <string name="toast_error_externalstorage">There was a problem accessing your device\'s storage</string>
+    <string name="toast_general_error">Sorry, error.</string>
+    <string-array name="camera_choices">
+        <item>Take Picture</item>
+        <item>Take Video</item>
+        <item>Choose Picture</item>
+        <item>Choose Video</item>
+    </string-array>
 </resources>

@@ -18,6 +18,8 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import butterknife.InjectView;
+
 
 public class LoginActivity extends Activity {
 
