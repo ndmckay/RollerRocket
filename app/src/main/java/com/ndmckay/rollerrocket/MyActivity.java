@@ -2,7 +2,6 @@ package com.ndmckay.rollerrocket;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +21,9 @@ import android.widget.Toast;
 import com.parse.ParseUser;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -40,6 +42,9 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
 
     public static final int MEDIA_TYPE_IMAGE = 4;
     public static final int MEDIA_TYPE_VIDEO = 5;
+
+    // 10MB
+    public static final int FILE_SIZE_LIMIT = 1024*1024*10;
 
     protected Uri mMediaUri;
 
@@ -76,7 +81,12 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
                     Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     choosePhotoIntent.setType("image/*");
                     startActivityForResult(choosePhotoIntent, PICK_PHOTO_REQUEST);
+                    break;
                 case 3:
+                    Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    chooseVideoIntent.setType("video/*");
+                    Toast.makeText(MyActivity.this, getString(R.string.toast_video_length), Toast.LENGTH_LONG).show();
+                    startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
                     break;
             }
         }
@@ -203,6 +213,38 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
                 else {
                     mMediaUri = data.getData();
                 }
+
+                Log.i(TAG, "Media URI: " + mMediaUri);
+                if (requestCode == PICK_VIDEO_REQUEST) {
+                    InputStream inputStream = null;
+                    int fileSize = 0;
+                    try {
+                        inputStream = getContentResolver().openInputStream(mMediaUri);
+                        fileSize = inputStream.available();
+                    }
+                    catch (FileNotFoundException e) {
+                        Toast.makeText(this, getString(R.string.toast_error_loadfile), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    catch (IOException e) {
+                        Toast.makeText(this, getString(R.string.toast_error_loadfile), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    finally {
+                        try {
+                            inputStream.close();
+                        } catch (Exception e) {
+                            // Meh.
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if (fileSize >= FILE_SIZE_LIMIT) {
+                        Toast.makeText(this, getString(R.string.toast_error_size_too_large), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                }
             }
             else {
                 // add it
@@ -210,6 +252,18 @@ public class MyActivity extends FragmentActivity implements ActionBar.TabListene
                 mediaScanIntent.setData(mMediaUri);
                 sendBroadcast(mediaScanIntent);
             }
+
+            Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
+            recipientsIntent.setData(mMediaUri);
+            String fileType;
+            if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
+                fileType = ParseConstants.TYPE_IMAGE;
+            }
+            else {
+                fileType = ParseConstants.TYPE_VIDEO;
+            }
+            recipientsIntent.putExtra(ParseConstants.KEY_FILE_TYPE, fileType);
+            startActivity(recipientsIntent);
         }
         else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, getString(R.string.toast_general_error), Toast.LENGTH_LONG).show();
